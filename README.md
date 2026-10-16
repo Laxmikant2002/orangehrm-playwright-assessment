@@ -53,7 +53,7 @@ $env:ORANGEHRM_PASSWORD = "admin123"
 npm test
 ```
 
-`fullyParallel` is enabled, but `workers: 1` is intentional for the shared public demo, which can race concurrent sessions. CI uses two retries; local runs do not retry. The HTML reporter is enabled, screenshots and videos are retained on failures, and traces are collected on the first retry. Chromium is the default project because the public demo is not consistently reliable in Firefox/WebKit.
+`fullyParallel` is enabled, but `workers: 1` is intentional for the shared public demo, which can race concurrent sessions. Assertions allow up to 15 seconds for remote API/grid rendering, and CI tests allow 60 seconds for remote startup/navigation. CI uses two retries; local runs do not retry. The HTML reporter is enabled, screenshots and videos are retained on failures, and traces are collected on the first retry. Chromium is the default project because the public demo is not consistently reliable in Firefox/WebKit.
 
 The resilience test aborts `**/api/v2/pim/employees**` with `page.route()` and verifies that the PIM shell remains usable and the user stays on the employee list. The GitHub Actions workflow uploads the HTML report as an artifact.
 

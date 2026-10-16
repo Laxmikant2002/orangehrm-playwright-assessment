@@ -12,6 +12,7 @@ export const test = base.extend<{
   authenticatedPage: async ({ page, loginPage }, use) => {
     await loginPage.goto();
     await loginPage.login(environment.username, environment.password);
+    await page.waitForURL(/dashboard\/index/);
     await use(page);
   },
 });

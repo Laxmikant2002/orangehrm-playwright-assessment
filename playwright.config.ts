@@ -14,11 +14,15 @@ import { environment } from './config/environment';
  */
 export default defineConfig({
   testDir: './tests',
+  timeout: process.env.CI ? 60000 : 30000,
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: 1,
   reporter: 'html',
+  expect: {
+    timeout: 15000,
+  },
   use: {
     baseURL: environment.baseUrl,
     trace: 'on-first-retry',
