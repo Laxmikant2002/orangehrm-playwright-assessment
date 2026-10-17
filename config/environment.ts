@@ -7,7 +7,16 @@ export interface EnvironmentConfig {
   password: string;
 }
 
-const environmentName = (process.env.TEST_ENV ?? 'demo') as EnvironmentName;
+const requestedEnvironment = process.env.TEST_ENV ?? 'demo';
+const environmentNames: EnvironmentName[] = ['demo', 'staging', 'local'];
+
+if (!environmentNames.includes(requestedEnvironment as EnvironmentName)) {
+  throw new Error(
+    `Unsupported TEST_ENV "${requestedEnvironment}". Use one of: ${environmentNames.join(', ')}`,
+  );
+}
+
+const environmentName = requestedEnvironment as EnvironmentName;
 const defaults: Record<EnvironmentName, Omit<EnvironmentConfig, 'name'>> = {
   demo: {
     baseUrl: 'https://opensource-demo.orangehrmlive.com',
@@ -26,10 +35,10 @@ const defaults: Record<EnvironmentName, Omit<EnvironmentConfig, 'name'>> = {
   },
 };
 
-const selected = defaults[environmentName] ?? defaults.demo;
+const selected = defaults[environmentName];
 
 export const environment: EnvironmentConfig = {
-  name: defaults[environmentName] ? environmentName : 'demo',
+  name: environmentName,
   baseUrl: process.env.BASE_URL ?? selected.baseUrl,
   username: process.env.ORANGEHRM_USERNAME ?? selected.username,
   password: process.env.ORANGEHRM_PASSWORD ?? selected.password,
